@@ -1,0 +1,28 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model TheBot.Data.Entities.BotEntity
+@{
+    ViewData["Title"] = "Add new entity";
+}
+<form asp-controller="Entity" asp-action="Add" method="post" class="form-horizontal" role="form">
+    <h2>Ceate a new Entity</h2>
+    <div class="form-group">
+        <label asp-for="entityname"></label>
+        <input asp-for="entityname" class="form-control" placeholder="Name of your entity" />
+    </div>
+    <div class="form-group">
+        <label asp-for="details"></label>
+        <input asp-for="details" class="form-control" placeholder="Details" />
+    </div>
+    <div class="form-group">
+        <label asp-for="source"></label>
+        <input asp-for="source" class="form-control" placeholder="Source of the details" />
+    </div>
+    <div class="form-group">
+        <label asp-for="tags"></label>
+        <input asp-for="tags" class="form-control" placeholder="Comma separated tags" />
+    </div>
+  
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>

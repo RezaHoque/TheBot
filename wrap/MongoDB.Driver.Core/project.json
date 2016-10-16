@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "dnx451": {
+      "bin": {
+        "assembly": "../../TheBot.Data/bin/Debug/MongoDB.Driver.Core.dll"
+      },
+      "dependencies": {
+        "MongoDB.Bson": "1.0.0-*"
+      }
+    }
+  }
+}

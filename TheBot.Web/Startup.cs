@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TheBot.Web.Models;
 using TheBot.Web.Services;
+using TheBot.Data.Services;
+using TheBot.Data.DataAccess;
 
 namespace TheBot.Web
 {
@@ -53,6 +55,7 @@ namespace TheBot.Web
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IEntityService, EntityManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

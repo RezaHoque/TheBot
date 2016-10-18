@@ -28,6 +28,18 @@ namespace TheBot.Data.DataAccess
             await collection.InsertOneAsync(entity);
         }
 
+        public async Task DeleteEntity(string id)
+        {
+            var db = GetDatabase();
+            var collection = db.GetCollection<BotEntity>("entities");
+
+            var filter = Builders<BotEntity>.Filter.Eq("_id",ObjectId.Parse(id));
+
+            var document = collection.Find(filter).FirstOrDefault();
+
+            await collection.DeleteOneAsync(filter);
+        }
+
         public async Task<IEnumerable<BotEntity>> GetEntities()
         {
             var db = GetDatabase();

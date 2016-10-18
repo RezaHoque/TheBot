@@ -13,6 +13,11 @@ namespace TheBot.Web.Controllers
 {
     public class EntityController : Controller
     {
+        private readonly IEntityService entityService;
+        public EntityController(IEntityService service)
+        {
+            entityService = service;
+        }
         // GET: /<controller>/
         public IActionResult Index()
         {
@@ -27,8 +32,7 @@ namespace TheBot.Web.Controllers
         [HttpPost]
         public IActionResult Add(IFormCollection frm)
         {
-            IEntityService service = new EntityManager();
-
+            
             var entityName = frm["entityname"];
             var details = frm["details"];
             var source = frm["source"];
@@ -42,9 +46,23 @@ namespace TheBot.Web.Controllers
 
 
 
-            service.AddEntity(entity);
+            entityService.AddEntity(entity);
 
             return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> List()
+        {
+            var documents = await entityService.GetEntities();
+
+            return View(documents);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await entityService.DeleteEntity(id);
+
+            return Content(Boolean.TrueString);
         }
     }
 }

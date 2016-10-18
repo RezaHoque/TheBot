@@ -243,3 +243,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/TheBot/Web.config
+/TheBot/Web.Debug.config
+*.config

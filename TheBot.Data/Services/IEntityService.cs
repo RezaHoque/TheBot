@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace TheBot.Data.Services
         Task AddEntity(BotEntity entity);
         Task<BotEntity> GetEntity(string tag);
         Task<IEnumerable<BotEntity>> GetEntities();
+        Task DeleteEntity(string id);
     }
 }

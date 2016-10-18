@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<TheBot.Data.Entities.BotEntity>
+@{
+    ViewData["Title"] = "List of entities";
+}
+<div>
+    <h2>List of entities</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Entity Name</th>
+                <th>Details</th>
+                <th>Source</th>
+                <th>Tags</th>
+                <th>Action Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doc in Model)
+            {
+
+                <tr id="@doc.id">
+                    <td>@doc.id</td>
+                    <td>@doc.entityname</td>
+                    <td>@doc.details</td>
+                    <td>@doc.source</td>
+                    <td>
+                        @foreach(var i in doc.tags)
+                        {
+                            <span>@i</span><span>&nbsp;</span>
+
+                        }
+                    </td>
+                    <td>@doc.actiondate</td>
+                    <td><a href="#" class="btn btn-danger delete">Delete</a></td>
+                </tr>
+            }
+            
+        </tbody>
+    </table>
+</div>

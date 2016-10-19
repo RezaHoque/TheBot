@@ -19,6 +19,7 @@ namespace TheBot
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
+           
             if (activity.Type == ActivityTypes.Message)
             {
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
@@ -32,6 +33,7 @@ namespace TheBot
             else
             {
                 HandleSystemMessage(activity);
+                
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
@@ -58,6 +60,7 @@ namespace TheBot
             else if (message.Type == ActivityTypes.Typing)
             {
                 // Handle knowing tha the user is typing
+                return message.CreateReply($"use is typing");
             }
             else if (message.Type == ActivityTypes.Ping)
             {

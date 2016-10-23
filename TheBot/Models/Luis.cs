@@ -10,5 +10,7 @@ namespace TheBot.Models
         public string query { get; set; }
         public Intent[] intents { get; set; }
         public Entity[] entities { get; set; }
+        public Dialog dialog { get; set; }
+        public Action[] actions { get; set; }
     }
 }

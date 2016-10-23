@@ -120,23 +120,38 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BusinessObjects\BotManager.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Action.cs" />
+    <Compile Include="Models\Dialog.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Intent.cs" />
     <Compile Include="Models\Luis.cs" />
+    <Compile Include="Models\Parameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IBotManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="PrivateSettings.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TheBot.Data\TheBot.Data.csproj">
+      <Project>{808e12ed-b3d7-4365-8ce0-5facd1203830}</Project>
+      <Name>TheBot.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

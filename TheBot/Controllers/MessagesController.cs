@@ -7,12 +7,19 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
+using TheBot.Services;
+using TheBot.BusinessObjects;
 
 namespace TheBot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        private readonly IBotManager manager;
+        public MessagesController()
+        {
+            manager = new BotManager();
+        }
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -22,12 +29,14 @@ namespace TheBot
            
             if (activity.Type == ActivityTypes.Message)
             {
+                var model = await manager.GetModelFromLuis(activity.Text);
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 // calculate something for us to return
-                int length = (activity.Text ?? string.Empty).Length;
+                //int length = (activity.Text ?? string.Empty).Length;
 
                 // return our reply to the user
-                Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
+                var answer =await manager.ProcessResponse(model);
+                Activity reply = activity.CreateReply(answer);
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
             else

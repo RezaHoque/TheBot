@@ -9,6 +9,7 @@ using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
 using TheBot.Services;
 using TheBot.BusinessObjects;
+using System.Text;
 
 namespace TheBot
 {
@@ -26,17 +27,45 @@ namespace TheBot
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-           
+            bool askedForUserName = false;
+            string userName = "";
+            StringBuilder replyMessage = new StringBuilder();
             if (activity.Type == ActivityTypes.Message)
             {
-                var model = await manager.GetModelFromLuis(activity.Text);
-                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                // calculate something for us to return
-                //int length = (activity.Text ?? string.Empty).Length;
 
+                StateClient sc = activity.GetStateClient();
+                BotData userData = await sc.BotState.GetPrivateConversationDataAsync(activity.ChannelId, activity.Conversation.Id, activity.From.Id);
+                askedForUserName=userData.GetProperty<bool>("AskedForUserName");
+                userName= userData.GetProperty<string>("UserName") ?? "";
+                if (!askedForUserName)
+                {
+                    replyMessage.Append($"Hi ! I am your friend Pluto. What's your name? ");
+                    userData.SetProperty<bool>("AskedForUserName", true);
+                }
+                else
+                {
+                    if (userName == "")
+                    {
+                        replyMessage.Append($"Hello {activity.Text}. How can I help you?");
+                        userData.SetProperty<string>("UserName", activity.Text);
+                    }
+                    else
+                    {
+                        var model = await manager.GetModelFromLuis(activity.Text);
+                        var answer = await manager.ProcessResponse(model);
+                        replyMessage.Append(answer);
+
+                    }
+
+                }
+                await sc.BotState.SetPrivateConversationDataAsync(activity.ChannelId, activity.Conversation.Id, activity.From.Id,userData);
+                //var model = await manager.GetModelFromLuis(activity.Text);
+                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+      
                 // return our reply to the user
-                var answer =await manager.ProcessResponse(model);
-                Activity reply = activity.CreateReply(answer);
+               // var answer =await manager.ProcessResponse(model);
+               // replyMessage.Append(answer);
+                Activity reply = activity.CreateReply(replyMessage.ToString());
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
             else
@@ -54,6 +83,19 @@ namespace TheBot
             {
                 // Implement user deletion here
                 // If we handle user deletion, return a real message
+                StateClient sc = message.GetStateClient();
+                BotData userData = sc.BotState.GetPrivateConversationData(message.ChannelId, message.Conversation.Id, message.From.Id);
+                userData.SetProperty<string>("UserName", "");
+                userData.SetProperty<bool>("AskedForUserName", false);
+                // Save BotUserData
+                sc.BotState.SetPrivateConversationData(
+                    message.ChannelId, message.Conversation.Id, message.From.Id, userData);
+                // Reply message
+                ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
+                Activity replyMessage = message.CreateReply("user data has been deleted.");
+                return replyMessage;
+
+
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
